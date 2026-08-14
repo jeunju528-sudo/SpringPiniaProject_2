@@ -36,8 +36,8 @@ jobs:
       - run: docker build -t food-app .
       # 기존의 docker ps를 중지 / 삭제 
       - run: |
-          docker stop mini-app || true 
-          docker rm mini-app || true
+          docker stop food-app || true 
+          docker rm food-app || true
       # 새로운 docker 실행 (컨테이너)
       - run: |
           docker run --name food-app -d --env-file .env -p 9090:9090 food-app
