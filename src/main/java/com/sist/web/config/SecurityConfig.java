@@ -1,16 +1,10 @@
 package com.sist.web.config;
 
-import javax.sql.DataSource;
-
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 
 import com.sist.web.security.LoginFailHandler;
 import com.sist.web.security.LoginSuccessHandler;
@@ -23,7 +17,6 @@ import lombok.RequiredArgsConstructor;
 public class SecurityConfig {
 	private final LoginSuccessHandler loginSuccessHandler;
 	private final LoginFailHandler loginFailHandler;
-	private final DataSource dataSource;
 
 	/*
 	 * CSRF : 공격자가 인증된 브라우저에서 저장된 쿠키나 세션정보를 탈취해서 공격하는 것
@@ -53,26 +46,6 @@ public class SecurityConfig {
 		
 		return http.build();
 											
-	}
-	
-	@Bean
-	public AuthenticationManager authenticationManager(HttpSecurity http, BCryptPasswordEncoder passwordEncoder) throws Exception{
-		return null;
-	}
-	
-	@Bean
-	public JdbcUserDetailsManager jdbcUserDetailsManager() {
-		return null;
-	}
-	
-	@Bean
-	public BCryptPasswordEncoder passwordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
-	
-	@Bean
-	public PersistentTokenRepository persistentTokenRepository() {
-		return null;
 	}
 
 }
