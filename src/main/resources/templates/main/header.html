@@ -26,10 +26,10 @@ xmlns에 sec는 고유 식별용 문자열 꼭 sec로 안적어도 됨, 적힌 u
 					</a>
 					<ul class="dropdown-menu">
 						<li>
-							<a href="#">맛집 검색</a>
+							<a href="#">맛집검색</a>
 						</li>
-						<li sec:>
-							<a href="#">맛집 추천</a>
+						<li>
+							<a href="#">맛집추천</a>
 						</li>
 					</ul>
 				</li>
@@ -43,7 +43,7 @@ xmlns에 sec는 고유 식별용 문자열 꼭 sec로 안적어도 됨, 적힌 u
 							<a href="#">레시피</a>
 						</li>
 						<li>
-							<a href="#">레시피 검색</a>
+							<a href="#">검색</a>
 						</li>
 						<li>
 							<a href="#">쉐프</a>
@@ -54,20 +54,39 @@ xmlns에 sec는 고유 식별용 문자열 꼭 sec로 안적어도 됨, 적힌 u
 					<a href="#">실시간 채팅</a>
 				</li>
 				<li>
-					<a href="#">Test</a>
+					<a href="#">빠른 예약</a>
 				</li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">
-				<li>
+				<li sec:authorize="!isAuthenticated()">
 					<a href="#">
 						<span class="glyphicon glyphicon-user"></span>
 						회원가입
 					</a>
 				</li>
-				<li>
-					<a href="#">
+				<li sec:authorize="!isAuthenticated()">
+					<a href="/member/login">
 						<span class="glyphicon glyphicon-log-in"></span>
 						로그인
+					</a>
+				</li>
+				<li sec:authorize="isAuthenticated()">
+				<li sec:authorize="hasRole('ADMIN')">
+					<a href="#">
+						<span sec:authentication="name"></span>
+						(관리자) 로그인되었습니다
+					</a>
+				</li>
+				<li sec:authorize="hasRole('USER')">
+					<a href="#">
+						<span sec:authentication="name"></span>
+						(일반사용자) 로그인되었습니다
+					</a>
+				</li>
+				<li sec:authorize="isAuthenticated()">
+					<a href="/member/logout">
+						<span class="glyphicon glyphicon-log-in"></span>
+						로그아웃
 					</a>
 				</li>
 			</ul>
