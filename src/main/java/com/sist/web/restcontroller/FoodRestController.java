@@ -1,4 +1,4 @@
-package com.sist.web.controller;
+package com.sist.web.restcontroller;
 
 import java.util.HashMap;
 import java.util.List;
@@ -21,7 +21,7 @@ public class FoodRestController {
 	private final FoodService service;
 	// ResponseEntity : Spring Framework(Web MVC)에서 HTTP 요청에 대한 응답 전체(HTTP 상태 코드, 응답 헤더, 응답 본문)를 개발자가 직접 제어하고 구성할 수 있도록 지원하는 객체
 	@GetMapping("/food/list_vue")
-	public ResponseEntity<Map<String, Object>> food_list(@RequestParam(value = "page", defaultValue = "1") int page){
+	public ResponseEntity<Map<String, Object>> food_list(@RequestParam(value = "page", defaultValue = "1") int page) {
 		Map<String, Object> map = new HashMap<>();
 		try {
 			List<FoodVO> list = service.foodListData(page);
@@ -33,10 +33,10 @@ public class FoodRestController {
 			map.put("endpage", pages[3]);
 		} catch (Exception e) {
 			e.printStackTrace();
-		    Map<String, Object> errorBody = new HashMap<>();
-		    errorBody.put("message", "서버 처리 중 오류가 발생했습니다.");
+			Map<String, Object> errorBody = new HashMap<>();
+			errorBody.put("message", "서버 처리 중 오류가 발생했습니다.");
 
-		    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorBody);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorBody);
 		}
 		/*
 		 * 리턴방식 2가지

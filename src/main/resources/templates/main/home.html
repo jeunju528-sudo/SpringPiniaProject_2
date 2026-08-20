@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"> <!-- sec 접두사를 쓰겠다고 명시 -->
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
@@ -19,7 +20,7 @@ p {
 	<div class="container">
 		<div class="row">
 			<div class="col-sm-3" v-for="(vo, index) in store.list" :key="index">
-				<a :href="'/food/detail/'+vo.no">
+				<a :href="'/food/detail_before/'+vo.no">
 					<div class="thumbnail">
 						<img :src="vo.poster" :title="vo.address" style="object-fit:cover; width: 250px; height: 150px;">
 						<p>{{vo.name}}</p>

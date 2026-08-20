@@ -70,17 +70,22 @@ xmlns에 sec는 고유 식별용 문자열 꼭 sec로 안적어도 됨, 적힌 u
 						로그인
 					</a>
 				</li>
-				<li sec:authorize="isAuthenticated()">
 				<li sec:authorize="hasRole('ADMIN')">
 					<a href="#">
-						<span sec:authentication="name"></span>
+						<span th:text="${session.username}"></span>
 						(관리자) 로그인되었습니다
 					</a>
 				</li>
-				<li sec:authorize="hasRole('USER')">
+				<li sec:authorize="hasRole('USER') and !hasRole('ADMIN')">
 					<a href="#">
-						<span sec:authentication="name"></span>
+						<span th:text="${session.username}"></span>
 						(일반사용자) 로그인되었습니다
+					</a>
+				</li>
+				<li sec:authorize="hasRole('MANAGER')">
+					<a href="#">
+						<span th:text="${session.username}"></span>
+						(매니저) 로그인되었습니다
 					</a>
 				</li>
 				<li sec:authorize="isAuthenticated()">

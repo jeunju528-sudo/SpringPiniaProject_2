@@ -59,15 +59,13 @@ import lombok.RequiredArgsConstructor;
  *         /member => permitAll
  */
 public class SecurityConfig {
-   private final LoginSuccessHandler loginSuccessHandler;
-   private final LoginFailHandler  loginFailHandler;
-   private final DataSource dataSource;
-   
-   // 접근 권한 => SecurityFilterChain
-   @Bean
-   public SecurityFilterChain filterChain(HttpSecurity http)
-   throws Exception
-   {
+	private final LoginSuccessHandler loginSuccessHandler;
+	private final LoginFailHandler loginFailHandler;
+	private final DataSource dataSource;
+
+	// 접근 권한 => SecurityFilterChain
+	@Bean
+	public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 	   // 공격 방어 
 	   /*
 	    *     CSRF 
@@ -107,10 +105,10 @@ public class SecurityConfig {
 	          .invalidateHttpSession(true)
 	          .deleteCookies("remember-me","JSESSIONID")
 	    );
-	    // remember-me
-	    return http.build();
-	    
-   }
+		// remember-me
+		return http.build();
+
+	}
    /*
     *   권한 
     *     => permitAll
@@ -145,42 +143,34 @@ public class SecurityConfig {
    public PersistentTokenRepository persistentTokenRepository() {
 	   return null;
    }*/
-   @Bean
-   public AuthenticationManager authenticationManager(
-      HttpSecurity http,
-      BCryptPasswordEncoder passwordEncoder
-   ) throws Exception
-   {
-	   AuthenticationManagerBuilder builder=
-			   http.getSharedObject(AuthenticationManagerBuilder.class);
-	   builder
-	     .userDetailsService(jdbcUserDetailsService())
-	     .passwordEncoder(passwordEncoder());
-	   return builder.build();
-   }
-   @Bean
-   public JdbcUserDetailsManager jdbcUserDetailsService() {
-	   JdbcUserDetailsManager manager=
-			   new JdbcUserDetailsManager(dataSource);
-	   manager.setUsersByUsernameQuery(
-			   "SELECT userid as username,userpwd as password,enable "
-			   +"FROM springmember WHERE userid=?"
-	   );
-	   manager.setAuthoritiesByUsernameQuery(
-			   "SELECT userid as username , authority "
-			  +"FROM authority WHERE userid=?"
-	   );
-	   return manager;
-   }
-   @Bean
-   public BCryptPasswordEncoder passwordEncoder() {
-	   return new BCryptPasswordEncoder();
-   }
-   @Bean
-   public PersistentTokenRepository persistentTokenRepository() {
-       JdbcTokenRepositoryImpl repo = new JdbcTokenRepositoryImpl();
-       repo.setDataSource(dataSource);
-       return repo;
-   }
+	@Bean
+	public AuthenticationManager authenticationManager(HttpSecurity http, BCryptPasswordEncoder passwordEncoder)
+			throws Exception {
+		AuthenticationManagerBuilder builder = http.getSharedObject(AuthenticationManagerBuilder.class);
+		builder.userDetailsService(jdbcUserDetailsService()).passwordEncoder(passwordEncoder());
+		return builder.build();
+	}
+
+	@Bean
+	public JdbcUserDetailsManager jdbcUserDetailsService() {
+		JdbcUserDetailsManager manager = new JdbcUserDetailsManager(dataSource);
+		manager.setUsersByUsernameQuery(
+				"SELECT userid as username,userpwd as password,enable " + "FROM springmember WHERE userid=?");
+		manager.setAuthoritiesByUsernameQuery(
+				"SELECT userid as username , authority " + "FROM authority WHERE userid=?");
+		return manager;
+	}
+
+	@Bean
+	public BCryptPasswordEncoder passwordEncoder() {
+		return new BCryptPasswordEncoder();
+	}
+
+	@Bean
+	public PersistentTokenRepository persistentTokenRepository() {
+		JdbcTokenRepositoryImpl repo = new JdbcTokenRepositoryImpl();
+		repo.setDataSource(dataSource);
+		return repo;
+	}
    
 }
