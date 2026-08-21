@@ -1,8 +1,6 @@
 package com.sist.web.service;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
@@ -30,6 +28,18 @@ public class CommentServiceImpl implements CommentService{
 	@Override
 	public void commentInsert(CommentVO vo) {
 		mapper.commentInsert(vo);
+	}
+
+	@Override
+	public void commentDelete(int no) {
+		mapper.commentDelete(no);
+		
+	}
+
+	@Override
+	public void commentUpdate(String msg, int no) {
+		mapper.commentUpdate(msg, no);
+		
 	}
 
 }

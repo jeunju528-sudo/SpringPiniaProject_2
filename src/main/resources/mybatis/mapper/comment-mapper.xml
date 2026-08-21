@@ -2,11 +2,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.sist.web.mapper.CommentMapper">
 	<select id="commentListData" resultType="com.sist.web.vo.CommentVO" parameterType="int">
-		SELECT no, fno, id, name, to_char(regdate, 'yyyy-mm-dd hh24:mi:ss') as dbday
+		SELECT no, fno, id, name, to_char(regdate, 'yyyy-mm-dd hh24:mi:ss') as dbday, msg
 		 FROM piniacomment
 		WHERE fno = #{fno}
 		ORDER BY no DESC
-		OFFSET #{start} ROWS FETCH NEXT 10 ROWS ONLY
+		OFFSET #{start} ROWS FETCH NEXT 5 ROWS ONLY
 	</select>
 	<select id="commentRowCount" resultType="int" parameterType="int">
 		SELECT COUNT(*) 
@@ -17,4 +17,12 @@
 		INSERT INTO piniacomment
 		VALUES(pc_no_seq.nextval, #{fno}, #{id}, #{name}, #{msg}, sysdate)
 	</insert>
+	
+<!--
+	<delete id="commentDelete" parameterType="int">
+		DELETE FROM piniacomment
+		WHERE no = #{no}
+	</delete>
+ -->
+	
 </mapper>
