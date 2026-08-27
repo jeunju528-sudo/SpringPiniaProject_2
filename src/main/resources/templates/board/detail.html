@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<style type="text/css">
+.row {
+	margin: 0px auto;
+	width: 800px;
+}
+
+h3 {
+	text-align: center;
+}
+</style>
+<script th:inline="javascript">
+const SESSION_ID = /*[[${session.userid}]]*/ ''
+const BOARDNO = /*[[${no}]]*/ 0
+</script>
+</head>
+<body>
+	<div class="container">
+		<div class="row">
+			<h3>내용보기</h3>
+			<table class="table">
+				<tbody>
+					<tr>
+						<th width="20%" class="text-center success">번호</th>
+						<td width="30%" class="text-center">[[${vo.no}]]</td>
+						<th width="20%" class="text-center success">작성일</th>
+						<td width="30%" class="text-center">[[${#temporals.format(vo.regdate, 'yyyy-MM-dd hh:mm:ss')}]]</td>
+					</tr>
+					<tr>
+						<th width="20%" class="text-center success">이름</th>
+						<td width="30%" class="text-center">[[${vo.name}]]</td>
+						<th width="20%" class="text-center success">조회수</th>
+						<td width="30%" class="text-center">[[${vo.hit}]]</td>
+					</tr>
+					<tr>
+						<th width="20%" class="text-center success">제목</th>
+						<td colspan="3" class="text-center">[[${vo.subject}]]</td>
+					</tr>
+					<tr>
+						<td colspan="4" class="text-left" valign="top" height="200">
+							<pre style="white-space: pre-wrap; background: white; border: none;">[[${vo.content}]]</pre>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="4" class="text-right">
+							<a href="#" class="btn btn-sm btn-info">수정</a>
+							<a href="#" class="btn btn-sm btn-success">삭제</a>
+							<a href="/board/list" class="btn btn-sm btn-warning">목록</a>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<div class="row" id="comment" style="margin-top: 20px;" sec:authorize="isAuthenticated()">
+			<h3>댓글</h3>
+			<table class="table" v-if="store.count == 0">
+				<tbody>
+					<tr>
+						<td class="text-center">
+							<h3>댓글이 없습니다</h3>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<table class="table" v-else>
+				<tbody>
+					<tr>
+						<td>
+							<table class="table">
+								<tbody v-for="(rvo, index) in store.list" :key="index">
+									<tr>
+										<td width="80%" class="text-left">
+											<span v-if="rvo.group_tab > 0">
+												<span v-for="i in rvo.group_tab">
+													&nbsp;&nbsp;
+												</span>
+												<img src="/image/re_icon.png">
+											</span>
+											◑ <span>{{rvo.name}}</span>
+											&nbsp;(<span>{{rvo.dbday}}</span>)
+										</td>
+										<td width="20%" class="text-right">
+											<a v-if="rvo.userid===store.sessionId" href="#" class="a-link btn btn-xs btn-info">수정</a>
+											<a v-if="rvo.userid===store.sessionId" href="#" class="a-link btn btn-xs btn-warning">삭제</a>
+											<a v-if="rvo.userid!==''" href="#" class="a-link btn btn-xs btn-success"
+												@click="store.toggleReply(rvo.no)">
+												{{rvo.no !== store.replyNo ? '댓글':'취소'}}
+											</a>
+										</td>
+									</tr>
+									<tr v-if="store.reReplyNo===rvo.no">
+										<td class="text-center">
+											<textarea rows="4" cols="70" style="float: left;" ref="replyRef" v-model="store.replyMsg[rvo.no]"></textarea>
+											<button type="button" class="btn-primary" style="width:88px; height: 88px; float: left;" 
+														@click="store.boardCommentReplyInsert(rvo.no)">저장</button>
+										</td>
+									</tr>
+									<tr>
+										<td colspan="2" valign="top">
+											<!-- white-space: pre-wrap; : 자동 줄바꿈 -->
+											<pre style="white-space: pre-wrap;">{{rvo.msg}}</pre>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<table class="table" sec:authorize="isAuthenticated()">
+				<tbody>
+					<tr>
+						<td class="text-center">
+							<textarea rows="4" cols="70" style="float: left;" ref="msgRef" v-model="store.msg"></textarea>
+							<button type="button" class="btn-primary" style="width:100px; height: 89px; float: left;" 
+										@click="store.boardCommentInsert(msgRef)">등록</button>
+						</td>
+					</tr>
+					
+				</tbody>
+			</table>
+		</div>
+		<th:block th:include="board/toast"></th:block>
+	</div>
+	<script src="/vue/axios.js"></script>
+	<script src="/vue/comment/boardStore.js"></script>
+	<script src="/vue/comment/boardView.js"></script>
+</body>
+</html>

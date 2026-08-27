@@ -16,12 +16,14 @@ public class WebSocketConfig
             MessageBrokerRegistry registry) {
 
         registry.enableSimpleBroker(
-                "/topic",
-                "/queue"
+                "/topic", // 전체채팅
+                "/queue", // 1:1채팅
+                "/sub"	  // 알림
         );
 
         registry.setApplicationDestinationPrefixes(
-                "/app"
+                "/app",
+                "/pub"
         );
 
         registry.setUserDestinationPrefix(

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sist.web.service.CommentService;
+import com.sist.web.vo.BootCommentVO;
 import com.sist.web.vo.CommentVO;
 
 import jakarta.servlet.http.HttpSession;
@@ -109,4 +110,5 @@ public class CommentRestController {
 		}
 		return ResponseEntity.ok(map);
 	}
+	
 }
