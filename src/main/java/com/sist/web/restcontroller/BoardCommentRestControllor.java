@@ -14,8 +14,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.sist.web.kafka.NoticeProducer;
 import com.sist.web.mapper.BoardCommentMapper;
 import com.sist.web.vo.BootCommentVO;
+import com.sist.web.vo.ChatMessage;
 
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +27,7 @@ import lombok.RequiredArgsConstructor;
 public class BoardCommentRestControllor {
 	private final BoardCommentMapper bMapper;
 	private final SimpMessagingTemplate template;
+	private final NoticeProducer noticeProducer;
 	
 	public Map<String, Object> commonsListData(int page, int board_no) {
 		Map<String, Object> map = new HashMap<>();
@@ -92,9 +95,14 @@ public class BoardCommentRestControllor {
 			bMapper.boardCommentReReply(vo);
 			bMapper.boardDepthIncrement(vo.getNo());
 			
+			
 			if(!pvo.getUserid().equals(vo.getUserid())) {
+				/* STOMP로 바로 전송할 때 사용
 				template.convertAndSend("/sub/notice/"+pvo.getUserid(),
 						"[📢댓글 알림] "+vo.getUserid()+"님이 댓글을 달았습니다!!");
+				*/
+				ChatMessage notice = new ChatMessage(vo.getUserid(), pvo.getUserid(), "[📢댓글 알림] "+vo.getUserid()+"님이 댓글을 달았습니다!!" );
+				noticeProducer.sendNotice(notice);
 			}
 			
 			map = commonsListData(vo.getPage(), vo.getBoard_no());

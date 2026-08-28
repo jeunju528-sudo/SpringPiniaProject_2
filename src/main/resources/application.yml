@@ -3,6 +3,20 @@ server:
   servlet:
     context-path: /
 spring:
+#  kafka:
+#    bootstrap-servers: localhost:9092
+#    producer: #kafka로 메세지를 보내는 producer 설정
+#      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+#      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+#    consumer:
+#      group-id: notification-group # consumer 클래스 생성
+#      auto-offset-reset: earliest  # 저장된 offset 이 없으면 가장 오래된 메세지부터 읽는다고 설정
+#      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer # key를 string 형태로 변환
+#      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer # value를 json 형태로 변환
+#      properties:
+#        spring.json.trusted.packages: com.sist.web.vo
+#    listener: # listener 설정 : json 역직렬화 역할 , record : 메세지 한개 -> 메세지 처리후에 offset commit 해줘야함
+#      ack-mode: record 
   datasource:
     url: ${DB_URL}
     username: ${DB_USERNAME}
